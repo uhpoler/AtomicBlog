@@ -8,7 +8,7 @@ function createRandomPost() {
   };
 }
 
-//1) CREATE A CONTEXT
+// 1) CREATE A CONTEXT
 const PostContext = createContext();
 
 function PostProvider({ children }) {
@@ -38,21 +38,23 @@ function PostProvider({ children }) {
   const value = useMemo(() => {
     return {
       posts: searchedPosts,
-      onClearPosts: handleClearPosts,
       onAddPost: handleAddPost,
+      onClearPosts: handleClearPosts,
       searchQuery,
       setSearchQuery,
     };
   }, [searchedPosts, searchQuery]);
+
   return (
     // 2) PROVIDE VALUE TO CHILD COMPONENTS
-    <PostContext.Provider value={{ value }}>{children}</PostContext.Provider>
+    <PostContext.Provider value={value}>{children}</PostContext.Provider>
   );
 }
 
 function usePosts() {
   const context = useContext(PostContext);
-  if (context === undefined) throw new Error("Error");
+  if (context === undefined)
+    throw new Error("PostContext was used outside of the PostProvider");
   return context;
 }
 
